@@ -30,7 +30,6 @@ pre: " <b> 1.12 </b> "
   * Bảo mật
   * Giám sát
   * Tài liệu
-  * ...
 
 * Hoàn thành đầy đủ tài liệu kỹ thuật và tài liệu triển khai của dự án.
 
@@ -42,10 +41,7 @@ pre: " <b> 1.12 </b> "
   * Kỹ năng thực hành
   * Kinh nghiệm triển khai
   * Quy trình thực hiện dự án
-  * ...
 
 * Trình bày dự án, tiếp nhận góp ý từ cán bộ hướng dẫn và hoàn thiện các nội dung còn tồn tại.
 
 * Hoàn thành chương trình thực tập, củng cố kiến thức và tích lũy kinh nghiệm thực tế trong việc thiết kế, triển khai, quản lý và tối ưu hệ thống trên nền tảng AWS.
-
-* ...

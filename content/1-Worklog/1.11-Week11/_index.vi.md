@@ -31,7 +31,6 @@ pre: " <b> 1.11. </b> "
   * Database
   * Storage
   * Monitoring
-  * ...
 
 * Tối ưu cấu hình hạ tầng nhằm nâng cao hiệu năng, khả năng mở rộng và tối ưu chi phí sử dụng tài nguyên.
 
@@ -40,11 +39,9 @@ pre: " <b> 1.11. </b> "
   * CloudWatch Logs
   * CloudWatch Alarms
   * Backup & Recovery
-  * ...
 
 * Phát hiện và khắc phục các lỗi cấu hình trong quá trình kiểm thử, góp phần nâng cao tính ổn định và độ tin cậy của hệ thống.
 
 * Hoàn thiện tài liệu kỹ thuật, tài liệu triển khai và tổng hợp kết quả kiểm thử của dự án.
 
 * Chuẩn bị đầy đủ tài liệu và môi trường phục vụ cho giai đoạn đánh giá, báo cáo và hoàn thiện dự án.
-* ...

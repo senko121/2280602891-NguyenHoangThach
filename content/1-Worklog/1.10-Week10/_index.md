@@ -41,5 +41,3 @@ pre: " <b> 1.10. </b> "
 * Improved understanding of system deployment, integration and cloud resource optimization on AWS.
 
 * Acquired the ability to analyze system performance and optimize resources for future scalability.
-
-* ...

@@ -32,7 +32,6 @@ pre: " <b> 1.11. </b> "
   * Database connectivity
   * Storage services
   * Monitoring
-  * ...
 
 * Optimized infrastructure configuration to improve system performance and resource efficiency.
 
@@ -42,11 +41,8 @@ pre: " <b> 1.11. </b> "
   * CloudWatch Logs
   * System alarms
   * Backup and recovery procedures
-  * ...
-
 * Identified and resolved configuration issues discovered during testing, improving the reliability of the deployment.
 
 * Completed the technical documentation and deployment records for the project.
 
 * Prepared the project for the final evaluation and presentation by ensuring the deployed infrastructure met the required functional and operational objectives.
-* ...

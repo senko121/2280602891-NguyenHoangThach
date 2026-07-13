@@ -42,5 +42,3 @@ pre: " <b> 1.10. </b> "
 * Nâng cao kiến thức về triển khai, tích hợp và tối ưu hệ thống trên nền tảng AWS.
 
 * Rèn luyện khả năng đánh giá hiệu năng và tối ưu tài nguyên để đáp ứng nhu cầu mở rộng của hệ thống trong tương lai.
-
-* ...

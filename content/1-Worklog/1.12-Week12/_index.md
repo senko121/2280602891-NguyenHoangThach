@@ -28,7 +28,6 @@ pre: " <b> 1.12. </b> "
   * Security
   * Monitoring
   * Documentation
-  * ...
 
 * Successfully completed the final project documentation.
 
@@ -39,9 +38,7 @@ pre: " <b> 1.12. </b> "
   * Practical experience
   * AWS best practices
   * Project implementation
-  * ...
 
 * Presented the completed project and received feedback from mentors.
 
 * Successfully completed the internship program and gained practical experience in deploying, managing, monitoring, and optimizing cloud infrastructure on AWS.
-* ...
