@@ -13,11 +13,11 @@ chapter: false
 
 &emsp; **Email:** thach172004@gmail.com
 
-&emsp; **Trường:** Đại học Sư phạm Kỹ thuật TP.HCM
+&emsp; **Trường:** Đại học Công nghệ Thành phố Hồ Chí Minh 
 
 &emsp; **Ngành:** Công nghệ thông tin
 
-&emsp; **Lớp:** AWS062026
+&emsp; **Lớp:** 22DTHA5
 
 &emsp; **Công ty thực tập:** Công ty TNHH Amazon Web Services Việt Nam
 
