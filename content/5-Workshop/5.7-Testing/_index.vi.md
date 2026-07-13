@@ -6,7 +6,7 @@ chapter : false
 pre : " <b> 5.7. </b> "
 ---
 
-Toàn bộ hệ thống đã chạy — giờ là lúc kiểm chứng các luồng nghiệp vụ quan trọng từ đầu đến cuối. Mọi bài test bên dưới thực hiện trên trình duyệt tại ```https://<domain-cloudfront-cua-ban>```.
+Toàn bộ hệ thống đã chạy — giờ là lúc kiểm chứng các luồng nghiệp vụ quan trọng từ đầu đến cuối. Mọi bài test bên dưới thực hiện trên trình duyệt tại ```https://d2x5ledabb9h2k.cloudfront.net```.
 
 #### 1. Trang chủ và hình ảnh
 

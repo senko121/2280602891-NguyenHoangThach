@@ -11,8 +11,8 @@ pre : " <b> 5.6.3 </b> "
 1. Trên máy cá nhân, tạo file ```react-project/.env.production``` — Create React App tự động đọc nó khi chạy `npm run build` và "nướng" các giá trị vào bundle:
 
 ```
-REACT_APP_BASE_URL=https://<domain-cloudfront-cua-ban>
-REACT_APP_API_URL=https://<domain-cloudfront-cua-ban>/api/v1
+REACT_APP_BASE_URL=https://d2x5ledabb9h2k.cloudfront.net
+REACT_APP_API_URL=https://d2x5ledabb9h2k.cloudfront.net/api/v1
 REACT_APP_IMAGE_URL=https://petshop-images-<ten-rieng-cua-ban>.s3.ap-southeast-1.amazonaws.com
 REACT_APP_GOOGLE_CLIENT_ID=<google-oauth-client-id>
 ```
@@ -45,8 +45,8 @@ Bundle production được sinh ra trong thư mục ```build/```.
 5. Cập nhật ```env.aws``` trên máy cá nhân với domain CloudFront, rồi upload lên bucket **petshop-deploy** (ghi đè):
 
 ```
-FRONTEND_URL=https://<domain-cloudfront-cua-ban>
-CORS_ALLOWED_ORIGINS=https://<domain-cloudfront-cua-ban>
+FRONTEND_URL=https://d2x5ledabb9h2k.cloudfront.net
+CORS_ALLOWED_ORIGINS=https://d2x5ledabb9h2k.cloudfront.net
 ```
 
 6. Làm mới instance đang chạy qua **Session Manager** (các instance sinh ra sau này tự lấy file mới lúc khởi động):
@@ -59,10 +59,10 @@ cd /var/www/petshop && sudo php artisan config:clear
 
 #### Đăng ký domain với Google OAuth
 
-7. Mở [Google Cloud Console](https://console.cloud.google.com/) → **APIs & Services → Credentials** → mở OAuth 2.0 Client ID → ở mục **Authorized JavaScript origins** bấm **Add URI** và nhập ```https://<domain-cloudfront-cua-ban>``` (không dấu `/` cuối, không kèm path) → **Save**. Thiếu bước này, đăng nhập Google sẽ báo *Error 400: origin_mismatch*. Thay đổi có hiệu lực sau 5 phút đến vài giờ.
+7. Mở [Google Cloud Console](https://console.cloud.google.com/) → **APIs & Services → Credentials** → mở OAuth 2.0 Client ID → ở mục **Authorized JavaScript origins** bấm **Add URI** và nhập ```https://d2x5ledabb9h2k.cloudfront.net``` (không dấu `/` cuối, không kèm path) → **Save**. Thiếu bước này, đăng nhập Google sẽ báo *Error 400: origin_mismatch*. Thay đổi có hiệu lực sau 5 phút đến vài giờ.
 
 ![google oauth](/images/5-Workshop/5.6-Frontend/deploy03.png)
 
-8. Mở ```https://<domain-cloudfront-cua-ban>``` — trang chủ PetShop hiển thị qua HTTPS với ảnh sản phẩm được phục vụ từ S3. 🎉
+8. Mở ```https://d2x5ledabb9h2k.cloudfront.net``` — trang chủ PetShop hiển thị qua HTTPS với ảnh sản phẩm được phục vụ từ S3. 🎉
 
 ![website](/images/5-Workshop/5.6-Frontend/deploy04.png)

@@ -11,8 +11,8 @@ pre : " <b> 5.6.3 </b> "
 1. On the local machine, create the file ```react-project/.env.production``` — Create React App reads it automatically during `npm run build` and bakes the values into the bundle:
 
 ```
-REACT_APP_BASE_URL=https://<your-cloudfront-domain>
-REACT_APP_API_URL=https://<your-cloudfront-domain>/api/v1
+REACT_APP_BASE_URL=https://d2x5ledabb9h2k.cloudfront.net
+REACT_APP_API_URL=https://d2x5ledabb9h2k.cloudfront.net/api/v1
 REACT_APP_IMAGE_URL=https://petshop-images-<your-unique-name>.s3.ap-southeast-1.amazonaws.com
 REACT_APP_GOOGLE_CLIENT_ID=<google-oauth-client-id>
 ```
@@ -45,8 +45,8 @@ The production bundle is generated in the ```build/``` folder.
 5. Update ```env.aws``` on the local machine with the CloudFront domain, then upload it to the **petshop-deploy** bucket (overwrite):
 
 ```
-FRONTEND_URL=https://<your-cloudfront-domain>
-CORS_ALLOWED_ORIGINS=https://<your-cloudfront-domain>
+FRONTEND_URL=https://d2x5ledabb9h2k.cloudfront.net
+CORS_ALLOWED_ORIGINS=https://d2x5ledabb9h2k.cloudfront.net
 ```
 
 6. Refresh the running instance through **Session Manager** (future instances pick the file up automatically at boot):
@@ -59,10 +59,10 @@ cd /var/www/petshop && sudo php artisan config:clear
 
 #### Register the domain with Google OAuth
 
-7. Open [Google Cloud Console](https://console.cloud.google.com/) → **APIs & Services → Credentials** → open the OAuth 2.0 Client ID → under **Authorized JavaScript origins** click **Add URI** and enter ```https://<your-cloudfront-domain>``` (no trailing slash, no path) → **Save**. Without this step, Google Sign-In fails with *Error 400: origin_mismatch*. Changes take effect after 5 minutes to a few hours.
+7. Open [Google Cloud Console](https://console.cloud.google.com/) → **APIs & Services → Credentials** → open the OAuth 2.0 Client ID → under **Authorized JavaScript origins** click **Add URI** and enter ```https://d2x5ledabb9h2k.cloudfront.net``` (no trailing slash, no path) → **Save**. Without this step, Google Sign-In fails with *Error 400: origin_mismatch*. Changes take effect after 5 minutes to a few hours.
 
 ![google oauth](/images/5-Workshop/5.6-Frontend/deploy03.png)
 
-8. Open ```https://<your-cloudfront-domain>``` — the PetShop home page loads over HTTPS with product images served from S3. 🎉
+8. Open ```https://d2x5ledabb9h2k.cloudfront.net``` — the PetShop home page loads over HTTPS with product images served from S3. 🎉
 
 ![website](/images/5-Workshop/5.6-Frontend/deploy04.png)

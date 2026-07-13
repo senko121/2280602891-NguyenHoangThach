@@ -6,7 +6,7 @@ chapter : false
 pre : " <b> 5.7. </b> "
 ---
 
-The whole system is live — time to verify the critical user flows end-to-end. Every test below runs in the browser against ```https://<your-cloudfront-domain>```.
+The whole system is live — time to verify the critical user flows end-to-end. Every test below runs in the browser against ```https://d2x5ledabb9h2k.cloudfront.net```.
 
 #### 1. Home page and images
 
