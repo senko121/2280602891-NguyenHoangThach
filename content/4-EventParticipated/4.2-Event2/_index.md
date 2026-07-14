@@ -6,7 +6,7 @@ chapter: false
 pre: " <b> 4.2. </b> "
 ---
 
-# Summary Report: "FCAJ Community Day #2"
+# Summary Report: "FCAJ Community Day"
 
 ### Event Objectives
 
@@ -124,7 +124,7 @@ The final session introduced how to build coordinated multi-agent AI systems tha
 
 ### Event Experience
 
-Attending **"FCAJ Community Day #2"** exposed me to a diverse range of topics — from career orientation and deep LLM internals to AWS system architecture.
+Attending **"FCAJ Community Day"** exposed me to a diverse range of topics — from career orientation and deep LLM internals to AWS system architecture.
 
 #### Learning from experienced speakers
 
@@ -151,9 +151,5 @@ The event provided opportunities to talk directly with speakers and fellow atten
 * Good architecture starts from the right foundation — CloudFront is a prime example of this mindset.
 * The AI-era job market favors people with strong fundamentals and fast learning ability.
 * Hands-on experience (hackathons, real projects) is the most effective and convincing way to learn.
-
-#### Some event photos
-
-*Add your event photos here*
 
 > Overall, the event provided both deep technical knowledge and a clearer career direction in the AI era. The sessions on Context Engineering, LLM limitations and AWS architecture are directly applicable to my studies and real projects, while the job market and hackathon sharing gave me more confidence on my career path in information technology.

@@ -26,9 +26,9 @@ More importantly, these events helped me realize that technical skills alone are
 
 ### [Event 2](4.2-Event2/)
 
- **Event Name:** GenAI-powered App-DB Modernization workshop
+ **Event Name:** FCAJ Community Day
 
- **Date & Time:** 09:00, August 13, 2025
+ **Date & Time:** 09:00, May 23, 2026
 
  **Location:** 26th Floor, Bitexco Tower, 02 Hai Trieu Street, Saigon Ward, Ho Chi Minh City
 

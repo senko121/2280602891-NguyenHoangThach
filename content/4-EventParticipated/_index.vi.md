@@ -26,9 +26,9 @@ Quan trọng hơn, những sự kiện này giúp em nhận ra rằng chỉ sở
 
 ### [Event 2](4.2-Event2/)
 
- **Tên sự kiện:** GenAI-powered App-DB Modernization workshop
+ **Tên sự kiện:** FCAJ Community Day
 
- **Thời gian:** 09:00 ngày 13/08/2025
+ **Thời gian:** Ngày 23/05/2026
 
  **Địa điểm:** Tầng 26, tòa nhà Bitexco, số 02 đường Hải Triều, phường Sài Gòn, thành phố Hồ Chí Minh
 
