@@ -28,7 +28,7 @@ More importantly, these events helped me realize that technical skills alone are
 
  **Event Name:** FCAJ Community Day
 
- **Date & Time:** 09:00, May 23, 2026
+ **Date & Time:** 
 
  **Location:** 26th Floor, Bitexco Tower, 02 Hai Trieu Street, Saigon Ward, Ho Chi Minh City
 

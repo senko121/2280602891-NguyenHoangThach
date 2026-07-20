@@ -28,7 +28,7 @@ Quan trọng hơn, những sự kiện này giúp em nhận ra rằng chỉ sở
 
  **Tên sự kiện:** FCAJ Community Day
 
- **Thời gian:** Ngày 23/05/2026
+ **Thời gian:** 
 
  **Địa điểm:** Tầng 26, tòa nhà Bitexco, số 02 đường Hải Triều, phường Sài Gòn, thành phố Hồ Chí Minh
 
