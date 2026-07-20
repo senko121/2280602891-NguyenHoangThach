@@ -10,9 +10,9 @@ During my internship, I proactively researched newly released AWS technologies a
 
 The published blog posts include:
 
-### [Blog 1 - OPTIMIZING AI COSTS WITH AMAZON BEDROCK](3.1-Blog1/)
+### [Blog 1 - BUILDING A SERVERLESS IMAGE EDITING AGENT WITH AMAZON BEDROCK AGENTCORE HARNESS](3.1-Blog1/)
 
-This blog explains how Amazon Bedrock helps organizations optimize the cost of Generative AI applications through a **Multi-Model** architecture. It analyzes the real-world success story of **InterWiz**, which reduced AI infrastructure costs by **90%**, improved application performance, and increased scalability by leveraging multiple Foundation Models instead of relying on a single model.
+This blog walks through building a serverless image editing agent, where users upload a photo, describe the edit in plain English, and get the result back in seconds. It focuses on **Amazon Bedrock AgentCore Harness**, which handles the entire AI agent orchestration, conversation memory, tool routing through the Model Context Protocol (MCP), and an isolated microVM execution environment.
 
 ### [Blog 2 - DEBUGGING PRODUCTION AI AGENTS WITH AMAZON BEDROCK AGENTCORE OBSERVABILITY](3.2-Blog2/)
 

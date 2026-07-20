@@ -5,43 +5,61 @@ weight: 1
 chapter: false
 pre: " <b> 3.1. </b> "
 ---
-# TỐI ƯU CHI PHÍ AI VỚI AMAZON BEDROCK
+# XÂY DỰNG TRÌNH CHỈNH SỬA HÌNH ẢNH KHÔNG MÁY CHỦ VỚI AMAZON BEDROCK AGENTCORE HARNESS
 
-Khi các ứng dụng Generative AI ngày càng được triển khai rộng rãi, việc kiểm soát chi phí hạ tầng AI đã trở thành một trong những thách thức lớn đối với nhiều doanh nghiệp. Trong giai đoạn phát triển ban đầu, việc sử dụng một Foundation Model duy nhất thường đủ để đáp ứng nhu cầu thử nghiệm. Tuy nhiên, khi hệ thống được đưa vào môi trường Production và phải xử lý hàng nghìn yêu cầu mỗi ngày, chi phí sử dụng AI có thể tăng rất nhanh và trở thành một khoản vận hành đáng kể.
+Bài viết này với mục đích chia sẻ và hướng dẫn cách xây dựng một trình chỉnh sửa hình ảnh không máy chủ, nơi người dùng tải ảnh lên, mô tả chỉnh sửa bằng tiếng Anh thông thường và nhận kết quả trong vài giây.
 
-Bên cạnh vấn đề chi phí, nhiều doanh nghiệp còn gặp phải tình trạng **vendor lock-in** khi phụ thuộc hoàn toàn vào một nhà cung cấp AI duy nhất. Điều này khiến việc đánh giá các mô hình mới, tối ưu chi phí hoặc lựa chọn mô hình phù hợp cho từng nghiệp vụ trở nên khó khăn hơn khi công nghệ AI liên tục phát triển.
+Điểm đặc biệt của giải pháp là sử dụng **Amazon Bedrock AgentCore Harness** để đảm nhiệm toàn bộ quá trình điều phối AI Agent, bao gồm quản lý vòng lặp suy luận, lựa chọn công cụ, lưu trữ bộ nhớ hội thoại và cung cấp môi trường thực thi.
 
-Amazon Bedrock được xây dựng nhằm giải quyết những vấn đề này bằng cách cung cấp một nền tảng thống nhất cho phép truy cập nhiều Foundation Model thông qua cùng một API. Thay vì sử dụng một mô hình cho tất cả các tác vụ, doanh nghiệp có thể lựa chọn Foundation Model phù hợp nhất dựa trên yêu cầu về khả năng suy luận, tốc độ phản hồi, hiệu năng và chi phí vận hành. Cách tiếp cận Multi-Model này giúp tối ưu tài nguyên, nâng cao hiệu quả xử lý và duy trì khả năng mở rộng của hệ thống.
+AgentCore Harness sẽ chạy agent trong một microVM có trạng thái và được cô lập, đồng thời tích hợp sẵn bộ nhớ, định tuyến công cụ và khả năng giám sát.
 
-Các điểm chính cần nắm:
+### Cách ứng dụng hoạt động
 
-* Amazon Bedrock cung cấp quyền truy cập đến nhiều Foundation Model như Amazon Nova, Anthropic Claude, Meta Llama, Cohere Command, Amazon Titan và nhiều mô hình khác thông qua một API thống nhất.
-* Mỗi tác vụ AI có thể sử dụng Foundation Model khác nhau nhằm cân bằng giữa khả năng suy luận, tốc độ xử lý, hiệu năng và chi phí vận hành.
-* Prompt Caching giúp giảm việc xử lý lặp lại các Prompt, từ đó giảm số lượng token tiêu thụ và cải thiện thời gian phản hồi.
-* Intelligent Prompt Routing tự động lựa chọn Foundation Model có chi phí tối ưu nhất cho từng yêu cầu mà không cần thay đổi logic của ứng dụng.
-* Prompt Optimization hỗ trợ tối ưu Prompt cho từng Foundation Model nhằm nâng cao chất lượng phản hồi và giảm lượng token không cần thiết.
-* Kiến trúc Multi-Model giúp hạn chế tình trạng vendor lock-in, đồng thời tạo điều kiện thuận lợi để tích hợp các Foundation Model mới trong tương lai.
-* Doanh nghiệp có thể tối ưu chi phí hạ tầng AI mà vẫn đảm bảo hiệu năng, khả năng mở rộng và tính sẵn sàng của hệ thống.
+AI Agent trong ứng dụng sử dụng **Claude Sonnet 4.6** để phân tích yêu cầu chỉnh sửa thành nhiều bước nhỏ. Sau đó, agent lựa chọn và gọi công cụ tương ứng với từng mô hình Stability AI để thực hiện chỉnh sửa ảnh.
 
-Một ví dụ thực tế được AWS chia sẻ là **InterWiz**, nền tảng AI hỗ trợ phỏng vấn tuyển dụng với hàng nghìn cuộc phỏng vấn được thực hiện mỗi tháng. Ban đầu, hệ thống sử dụng chủ yếu một Foundation Model duy nhất, dẫn đến chi phí vận hành ngày càng tăng, độ trễ cao và khả năng mở rộng bị hạn chế khi số lượng người dùng tăng lên.
+Khi ảnh đã được xử lý, một chương trình Python chạy trực tiếp trong microVM để thêm watermark. Thao tác này không cần mô hình AI suy luận nên không tiêu tốn token.
 
-Để giải quyết vấn đề này, InterWiz đã chuyển toàn bộ hệ thống AI sang Amazon Bedrock với kiến trúc Multi-Model. Thay vì giao toàn bộ công việc cho một Foundation Model, từng mô hình được lựa chọn theo thế mạnh riêng. Anthropic Claude 3.5 Sonnet được sử dụng cho các tác vụ yêu cầu khả năng suy luận và tạo câu hỏi chất lượng cao, trong khi Meta Llama 3.3 70B đảm nhiệm các cuộc hội thoại thời gian thực và đánh giá ứng viên với chi phí thấp hơn cùng tốc độ xử lý nhanh hơn.
+### Những khả năng nổi bật
 
-Trong quá trình chuyển đổi, nhóm phát triển cũng tối ưu Prompt cho từng Foundation Model, áp dụng Prompt Caching nhằm giảm lượng xử lý lặp lại và sử dụng Intelligent Prompt Routing để tự động lựa chọn mô hình có chi phí phù hợp nhất cho từng loại yêu cầu. Nhờ đó, hệ thống vừa cải thiện hiệu năng kỹ thuật vừa tối ưu đáng kể chi phí vận hành.
+**1️⃣ Tạo AI Agent bằng cấu hình**
 
-Kết quả đạt được sau quá trình triển khai:
+Agent được định nghĩa hoàn toàn thông qua các tham số API. Không cần tự viết mã điều phối, sử dụng framework riêng hoặc xây dựng container.
 
-* Giảm **90%** chi phí hạ tầng AI.
-* Cải thiện **55%** thời gian phản hồi (từ khoảng **850 ms** xuống còn **450 ms**).
-* Duy trì **99,9%** tính sẵn sàng của dịch vụ nhờ kiến trúc Multi-Model kết hợp cơ chế tự động chuyển đổi khi xảy ra sự cố.
-* Tăng tính linh hoạt của hệ thống, giúp doanh nghiệp dễ dàng đánh giá và tích hợp các Foundation Model mới mà không cần thay đổi toàn bộ kiến trúc ứng dụng.
+**2️⃣ Chuyển đổi mô hình theo từng yêu cầu**
 
-Qua trường hợp của InterWiz có thể thấy rằng việc tối ưu hạ tầng AI không chỉ đơn thuần là lựa chọn Foundation Model mạnh nhất. Thay vào đó, việc sử dụng đúng mô hình cho từng nghiệp vụ sẽ giúp cân bằng tốt hơn giữa hiệu năng, chi phí vận hành, khả năng mở rộng và tính linh hoạt trong tương lai. Amazon Bedrock cung cấp nền tảng phù hợp để hiện thực hóa chiến lược này thông qua hệ sinh thái Foundation Model đa dạng cùng một API thống nhất.
+Frontend sử dụng **Claude Haiku 4.5** cho các cuộc hội thoại đơn giản và **Claude Sonnet 4.6** cho những yêu cầu chỉnh sửa ảnh phức tạp.
 
-Hình dưới đây minh họa kiến trúc tổng quan của Amazon Bedrock, cho phép doanh nghiệp xây dựng hệ thống AI theo mô hình Multi-Model nhằm tối ưu chi phí mà vẫn đảm bảo hiệu năng và khả năng mở rộng.
+**3️⃣ Thay đổi persona mà không cần triển khai lại**
+
+Người dùng có thể lựa chọn các persona theo từng lĩnh vực. Mỗi persona sẽ cung cấp một system prompt phù hợp với lĩnh vực tương ứng mà không cần sửa hoặc triển khai lại toàn bộ ứng dụng.
+
+**4️⃣ Lưu trữ lịch sử bằng AgentCore Memory**
+
+AgentCore Memory lưu lịch sử hội thoại trong 30 ngày. Nhờ đó, agent có thể tham chiếu đến các lần chỉnh sửa trước mà frontend không cần gửi lại toàn bộ nội dung trò chuyện.
+
+Session ID được lưu trong `localStorage` nên cuộc trò chuyện vẫn tiếp tục sau khi người dùng tải lại trang. Nếu dữ liệu trình duyệt bị xóa, frontend sẽ tạo phiên mới, nhưng lịch sử cũ vẫn có thể được truy xuất từ AgentCore thông qua **ListEvents API**.
+
+**5️⃣ Kết nối công cụ thông qua MCP**
+
+Ba công cụ chỉnh sửa ảnh được xây dựng bằng **AWS Lambda** và cung cấp cho agent thông qua **AgentCore Gateway** cùng **Model Context Protocol (MCP)**.
+
+Agent sẽ dựa vào nội dung yêu cầu để tự lựa chọn đúng công cụ cần sử dụng.
+
+**6️⃣ Xử lý tác vụ không cần AI để tiết kiệm token**
+
+Sau mỗi lần chỉnh sửa, một chương trình Python được chạy trực tiếp trong microVM để thêm watermark. Vì đây là thao tác xử lý ảnh thông thường nên không cần mô hình suy luận và không phát sinh chi phí token.
+
+### Kiến trúc hệ thống
+
+* Một giao diện người dùng **React** được lưu trữ trên **AWS Amplify**, nơi người dùng tải lên hình ảnh, vẽ mặt nạ và nhập hướng dẫn chỉnh sửa.
+* Một máy chủ proxy **AWS Lambda** hoạt động như một ranh giới bảo mật giữa thông tin xác thực trình duyệt và API của hệ thống, đồng thời kiểm soát các lời nhắc hệ thống nào được cho phép.
+* Một tác nhân **AgentCore** của Amazon Bedrock với **AgentCore Memory** để lưu trữ cuộc hội thoại.
+* Ba hàm **Lambda** công cụ gọi các mô hình nền tảng **Stability AI** thông qua Amazon Bedrock để tạo hình ảnh.
+
+Hình dưới đây minh họa kiến trúc tổng quan của giải pháp, từ giao diện người dùng đến các thành phần AgentCore và công cụ xử lý ảnh trên AWS.
 
 ![Amazon Bedrock Architecture](/images/3-Blog/bedrock-architecture.png)
 
 **Tham khảo:**
 
-https://aws.amazon.com/blogs/apn/how-interwiz-reduced-ai-costs-by-90-percent-with-amazon-bedrock/
+https://aws.amazon.com/vi/blogs/machine-learning/build-a-serverless-image-editing-agent-with-amazon-bedrock-agentcore-harness/

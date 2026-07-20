@@ -10,9 +10,9 @@ Trong quá trình thực tập, em đã chủ động nghiên cứu các công n
 
 Danh sách các bài blog đã thực hiện bao gồm:
 
-### [Blog 1 - TỐI ƯU CHI PHÍ AI VỚI AMAZON BEDROCK](3.1-Blog1/)
+### [Blog 1 - XÂY DỰNG TRÌNH CHỈNH SỬA HÌNH ẢNH KHÔNG MÁY CHỦ VỚI AMAZON BEDROCK AGENTCORE HARNESS](3.1-Blog1/)
 
-Bài viết giới thiệu cách Amazon Bedrock giúp doanh nghiệp tối ưu chi phí khi triển khai các ứng dụng Generative AI thông qua kiến trúc **Multi-Model**. Nội dung phân tích trường hợp thực tế của **InterWiz**, doanh nghiệp đã giảm tới **90% chi phí AI**, cải thiện hiệu năng và tăng khả năng mở rộng hệ thống bằng cách kết hợp nhiều Foundation Model thay vì chỉ sử dụng một mô hình duy nhất.
+Bài viết hướng dẫn cách xây dựng một trình chỉnh sửa hình ảnh không máy chủ, nơi người dùng tải ảnh lên, mô tả chỉnh sửa bằng ngôn ngữ tự nhiên và nhận kết quả trong vài giây. Nội dung tập trung vào **Amazon Bedrock AgentCore Harness** — thành phần đảm nhiệm toàn bộ việc điều phối AI Agent, quản lý bộ nhớ hội thoại, định tuyến công cụ qua Model Context Protocol (MCP) và cung cấp môi trường thực thi microVM cô lập.
 
 ### [Blog 2 - GỠ LỖI AI AGENTS TRONG MÔI TRƯỜNG PRODUCTION VỚI AMAZON BEDROCK AGENTCORE OBSERVABILITY](3.2-Blog2/)
 
