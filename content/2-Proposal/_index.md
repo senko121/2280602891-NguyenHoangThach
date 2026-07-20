@@ -114,7 +114,7 @@ The baseline cost while the system runs at normal load: the Auto Scaling Group s
 | Amazon Route 53 | ~$0.50 |
 | Amazon CloudWatch | ~$3.00 |
 | NAT Gateway (1 gateway) | ~$50.00 |
-| **Total (Tier 1)** | **~$110.60/month (~$1,327/year)** |
+| **Total (Tier 1)** | **\~$110.60/month (\~$1,327/year)** |
 
 ### Tier 2 — Under High Traffic (Auto Scaling triggered)
 

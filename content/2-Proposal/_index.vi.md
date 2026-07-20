@@ -118,7 +118,7 @@ Mức chi phí khi hệ thống hoạt động ở tải thông thường: Auto 
 | Amazon Route 53 | ~$0,50 |
 | Amazon CloudWatch | ~$3,00 |
 | NAT Gateway (1 gateway) | ~$50,00 |
-| **Tổng (Tầng 1)** | **~$110,60/tháng (~$1.327/năm)** |
+| **Tổng (Tầng 1)** | **\~$110,60/tháng (\~$1.327/năm)** |
 
 ### Tầng 2 — Khi lưu lượng tăng cao (Auto Scaling kích hoạt)
 
