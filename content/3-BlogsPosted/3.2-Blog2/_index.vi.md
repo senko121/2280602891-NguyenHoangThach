@@ -6,42 +6,78 @@ chapter: false
 pre: " <b> 3.2. </b> "
 ---
 
-# GỠ LỖI AI AGENTS TRONG MÔI TRƯỜNG PRODUCTION VỚI AMAZON BEDROCK AGENTCORE OBSERVABILITY
+# TỐI ƯU CHI PHÍ NAT GATEWAY TRÊN AWS
 
-Khi các AI Agent ngày càng được triển khai rộng rãi trong môi trường Production, việc giám sát và gỡ lỗi hệ thống trở nên khó khăn hơn rất nhiều so với các ứng dụng truyền thống. Đối với những ứng dụng thông thường, khi xảy ra sự cố hệ thống thường sinh ra Exception, HTTP Status Code hoặc các thông báo lỗi rõ ràng để hỗ trợ quá trình điều tra. Tuy nhiên, AI Agent lại có thể hoàn thành một yêu cầu thành công nhưng vẫn đưa ra câu trả lời sai, lựa chọn công cụ không phù hợp hoặc rơi vào các vòng lặp suy luận mà không hề phát sinh bất kỳ cảnh báo lỗi nào.
+Chào mọi người 👋
 
-Những lỗi "âm thầm" này khiến việc gỡ lỗi trong môi trường Production trở nên phức tạp hơn vì các giải pháp giám sát truyền thống chỉ cho biết rằng Agent đã hoàn thành yêu cầu, nhưng không thể giải thích **tại sao** Agent lại đưa ra quyết định như vậy. Các nhà phát triển thường biết rằng hệ thống đang hoạt động không đúng, nhưng lại thiếu khả năng quan sát toàn bộ quá trình suy luận bên trong của AI Agent.
+Nếu bạn đã đang làm việc với AWS và triển khai các hệ thống trên VPC, chắc chắn bạn đã nghe đến **NAT Gateway**.
 
-Amazon Bedrock AgentCore Observability được xây dựng nhằm giải quyết vấn đề này bằng cách cung cấp khả năng quan sát toàn diện mọi giai đoạn trong quá trình thực thi của AI Agent. Thay vì chỉ theo dõi kết quả cuối cùng, dịch vụ cho phép phân tích từng bước suy luận (Reasoning), các lần gọi Tool, quá trình truy xuất Memory, độ trễ, số lượng Token tiêu thụ và toàn bộ Execution Trace. Điều này giúp các nhóm phát triển nhanh chóng xác định nguyên nhân gốc rễ của sự cố và nâng cao độ tin cậy của các ứng dụng AI trong môi trường Production.
+### NAT Gateway là gì?
 
-Các điểm chính cần nắm:
+Khi chúng ta đặt EC2 hay ứng dụng trong **Private Subnet**, chúng không có Public IP nên không thể truy cập Internet trực tiếp. Nhưng đôi khi chúng vẫn cần kết nối ra ngoài để cập nhật hệ điều hành, tải thư viện từ npm hoặc Maven, gọi API của bên thứ ba, pull Docker image, hoặc kết nối dịch vụ bên ngoài khác.
 
-* Amazon Bedrock AgentCore Observability cung cấp ba lớp giám sát gồm **Metrics**, **Traces** và **Structured Logs**.
-* Tích hợp trực tiếp với Amazon CloudWatch để theo dõi thời gian phản hồi, lượng Token sử dụng, số lượng phiên làm việc và tỷ lệ lỗi theo thời gian thực.
-* Hỗ trợ OpenTelemetry (OTEL), cho phép xuất dữ liệu giám sát đến Amazon CloudWatch, Grafana, Datadog, Elastic Observability và nhiều nền tảng tương thích khác.
-* Cho phép quan sát toàn bộ quá trình suy luận, truy xuất Memory và gọi Tool thay vì chỉ xem kết quả cuối cùng của AI Agent.
-* CloudWatch Logs Insights hỗ trợ truy vấn Log mạnh mẽ, giúp nhanh chóng xác định nguyên nhân sự cố và phân tích hành vi thực thi của Agent.
-* CloudWatch Alarm có thể tự động phát hiện các bất thường như độ trễ tăng cao, lượng Token tiêu thụ bất thường hoặc tỷ lệ lỗi vượt ngưỡng cho phép.
-* AgentCore Observability giúp rút ngắn đáng kể thời gian gỡ lỗi bằng cách cung cấp khả năng quan sát toàn bộ quá trình thực thi của AI Agent.
+Đây chính là lúc **NAT Gateway** phát huy tác dụng. NAT Gateway là dịch vụ được AWS quản lý hoàn toàn, giúp các tài nguyên Private có thể chủ động truy cập Internet mà vẫn an toàn.
 
-Theo AWS, các AI Agent trong môi trường Production thường gặp ba nhóm sự cố chính.
+### Vấn đề: NAT Gateway có thể đốt sạch ngân sách
 
-Nhóm đầu tiên là **Quality Failures**, xảy ra khi Agent hoàn thành yêu cầu nhưng trả về kết quả không chính xác hoặc gây hiểu nhầm. Những vấn đề phổ biến bao gồm Hallucination, suy luận sai, tính toán không chính xác hoặc lựa chọn Tool không phù hợp với yêu cầu. Do yêu cầu vẫn được xử lý thành công nên các hệ thống giám sát truyền thống thường không phát hiện được những lỗi này.
+AWS tính phí NAT Gateway dựa trên ba yếu tố chính:
 
-Nhóm thứ hai là **Reliability Issues**, khiến AI Agent không thể hoàn thành quy trình xử lý. Một số ví dụ phổ biến là lỗi xác thực (401), lỗi phân quyền (403), dữ liệu đầu vào không hợp lệ (400), tài nguyên không tồn tại (404) hoặc mất Session/Context khiến Agent quên toàn bộ lịch sử hội thoại trước đó.
+* **Thời gian hoạt động** — NAT Gateway chạy 24/7 dù có traffic hay không.
+* **Dung lượng dữ liệu xử lý** — tính theo per GB.
+* **Phí truyền dữ liệu** — phát sinh nếu dữ liệu đi qua các AZ khác nhau.
 
-Nhóm cuối cùng là **Efficiency Problems**, chủ yếu ảnh hưởng đến hiệu năng và chi phí vận hành hơn là tính chính xác của kết quả. Những vấn đề thường gặp bao gồm độ trễ cao, lượng Token tiêu thụ quá lớn, gọi cùng một Tool nhiều lần hoặc rơi vào các vòng lặp suy luận (Infinite Reasoning Loop) khiến Agent liên tục tiêu tốn tài nguyên mà không tạo ra kết quả hữu ích.
+**Ví dụ minh họa:**
 
-Một ví dụ thực tế được AWS chia sẻ là trường hợp AI Agent rơi vào **Infinite Reasoning Loop**. Do System Prompt yêu cầu Agent phải tiếp tục thực hiện phép tính cho đến khi đạt được "kết quả hoàn hảo", Agent đã liên tục gọi cùng một Calculator Tool mà không có bất kỳ điều kiện dừng nào.
+Giả sử hệ thống của bạn có **3 Availability Zone**. AZ1 có 1 NAT Gateway cộng 1.000 GB traffic mỗi tháng. AZ2 và AZ3 cũng vậy.
 
-Trong một phiên làm việc, Agent đã tạo ra hơn **177 Reasoning Spans**, tiêu thụ khoảng **266 nghìn Token** và thực hiện xử lý liên tục trong gần **85 giây**, nhưng hoàn toàn không phát sinh bất kỳ lỗi hệ thống nào. Đối với các công cụ giám sát truyền thống, phiên làm việc này vẫn được ghi nhận là xử lý thành công.
+Chi phí mỗi AZ được tính như sau:
 
-Thông qua Amazon Bedrock AgentCore Observability, nhóm phát triển đã sử dụng OpenTelemetry Traces kết hợp với CloudWatch Logs Insights để phân tích toàn bộ quá trình thực thi. Kết quả cho thấy nguyên nhân không nằm ở Calculator Tool mà xuất phát từ System Prompt được thiết kế chưa hợp lý, thiếu điều kiện dừng trong quá trình suy luận. Sau khi bổ sung giới hạn số bước suy luận và điều kiện kết thúc rõ ràng, vòng lặp vô hạn đã được loại bỏ hoàn toàn.
+* Phí theo giờ: 0,045 × 730 giờ = **32,85 USD**.
+* Phí xử lý dữ liệu: 0,045 × 1.000 GB = **45 USD**.
+* **Tổng cộng mỗi AZ: 77,85 USD/tháng.**
 
-Ví dụ này cho thấy Execution Traces mang lại góc nhìn chi tiết hơn rất nhiều so với các Application Logs truyền thống. Thay vì chỉ biết rằng hệ thống xảy ra sự cố, các nhà phát triển có thể hiểu chính xác AI Agent đã suy luận như thế nào, đã lựa chọn Tool nào và tại bước nào quá trình thực thi bắt đầu đi chệch khỏi kết quả mong muốn.
+Chi phí ba AZ cộng lại: 77,85 × 3 = **233,55 USD/tháng**.
 
-Nhìn chung, Amazon Bedrock AgentCore Observability giúp doanh nghiệp vượt xa cách giám sát ứng dụng truyền thống bằng cách cung cấp khả năng quan sát toàn diện hành vi của AI Agent. Thông qua CloudWatch Dashboards, OpenTelemetry Traces, Structured Logs và CloudWatch Logs Insights, các nhóm phát triển có thể chủ động phát hiện sự cố, tối ưu quy trình suy luận, giảm chi phí vận hành và nâng cao độ ổn định của các AI Agent trong môi trường Production.
+Vậy có cách nào để giảm con số này không?
+
+### Giải pháp thứ nhất: Xác định traffic
+
+Trước khi tối ưu, cần biết dữ liệu thực sự đi đến đâu. Bạn cần trả lời các câu hỏi như:
+
+* EC2 nào tạo traffic nhiều nhất?
+* Traffic có đi ra Internet hay chỉ kết nối dịch vụ AWS?
+* Bao nhiêu traffic là đi đến S3?
+* Có NAT Gateway nào không được sử dụng không?
+
+Các công cụ để phân tích gồm:
+
+* **Amazon CloudWatch** để theo dõi các metric như `BytesInFromSource`, `BytesOutToDestination`, `ConnectionAttemptCount`.
+* **VPC Flow Logs** để ghi chi tiết traffic vào hoặc ra khỏi VPC.
+* **Amazon S3** để lưu trữ VPC Flow Logs.
+* **Amazon Athena** để truy vấn log bằng SQL và tìm ra những "top talkers".
+
+**Ví dụ phân tích:** sau khi phân tích VPC Flow Logs, bạn phát hiện rằng **50% traffic đi đến Amazon S3**, 30% gọi API bên ngoài, 15% tải package và cập nhật, và 5% đi tới dịch vụ khác.
+
+### Giải pháp thứ hai: Sử dụng S3 Gateway Endpoint
+
+Trong ví dụ trên, 50% traffic đi đến S3. Chúng ta không nhất thiết phải cho dữ liệu này đi qua NAT Gateway.
+
+**Cách hoạt động khi không có S3 Endpoint:** EC2 Private đi tới NAT Gateway, sau đó qua Internet, rồi mới tới S3.
+
+**Sau khi có S3 Endpoint:** EC2 Private đi thẳng tới S3 Gateway Endpoint, rồi tới S3 nội bộ AWS — không cần đi qua NAT Gateway hay Internet công cộng.
+
+**Chi phí sau khi thêm S3 Endpoint** được tính như sau: giả sử 50% traffic không cần đi qua NAT, mỗi AZ còn 500 GB.
+
+* Chi phí NAT theo giờ: **32,85 USD**.
+* Phí xử lý 500 GB: 0,045 × 500 = **22,50 USD**.
+* **Tổng mỗi AZ: 55,35 USD/tháng.**
+
+Tổng ba AZ: 55,35 × 3 = **166,05 USD/tháng**.
+
+So với ba NAT Gateway không có endpoint (233,55 USD/tháng), ta tiết kiệm được **67,50 USD/tháng**.
+
+![AWS NAT Gateway Cost Optimization](/images/3-Blog/aws_NAT.png)
 
 **Tham khảo:**
 
-https://aws.amazon.com/blogs/machine-learning/debugging-production-agents-with-amazon-bedrock-agentcore-observability/
+https://vegacloud.medium.com/aws-nat-gateway-optimization-bd5f7d2da8a8

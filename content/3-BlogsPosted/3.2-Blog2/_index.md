@@ -6,41 +6,78 @@ chapter: false
 pre: " <b> 3.2. </b> "
 ---
 
-# DEBUGGING PRODUCTION AI AGENTS WITH AMAZON BEDROCK AGENTCORE OBSERVABILITY
+# OPTIMIZING NAT GATEWAY COSTS ON AWS
 
-As AI Agents become increasingly common in production environments, monitoring and troubleshooting their behavior has become significantly more challenging than debugging traditional applications. Conventional applications usually generate explicit exceptions, HTTP status codes, or system errors when failures occur. In contrast, AI Agents may successfully complete a request while still producing incorrect answers, selecting inappropriate tools, or entering repetitive reasoning loops without triggering any error alerts.
+Hello everyone 👋
 
-These silent failures make production debugging particularly difficult because traditional monitoring solutions cannot explain **why** an agent produced a specific response. Developers often know that something went wrong, but they have very limited visibility into the agent's internal reasoning process.
+If you've worked with AWS and deployed systems inside a VPC, you've almost certainly heard of **NAT Gateway**.
 
-Amazon Bedrock AgentCore Observability addresses this challenge by providing comprehensive visibility into every stage of an AI Agent's execution. Instead of monitoring only the final response, developers can inspect reasoning steps, tool invocations, memory retrievals, latency, token usage, and execution traces. This enables engineering teams to quickly identify the root cause of production issues and improve the reliability of their AI applications.
+### What is a NAT Gateway?
 
-Key points to know:
+When we place EC2 instances or applications inside a **Private Subnet**, they don't have a Public IP, so they can't reach the Internet directly. However, they often still need outbound access — to update the operating system, download libraries from npm or Maven, call third-party APIs, pull Docker images, or connect to other external services.
 
-* Amazon Bedrock AgentCore Observability provides three layers of visibility through Metrics, Traces, and Structured Logs.
-* Native integration with Amazon CloudWatch enables real-time monitoring of latency, token usage, session volume, and error rates.
-* OpenTelemetry (OTEL) support allows observability data to be exported to CloudWatch, Grafana, Datadog, Elastic Observability, and other compatible monitoring platforms.
-* Developers can inspect every reasoning step, memory retrieval, and tool invocation instead of only viewing the final output.
-* CloudWatch Logs Insights enables powerful log queries to quickly identify production issues and investigate execution behavior.
-* CloudWatch Alarms can automatically detect abnormal latency, excessive token consumption, or unexpected error rates before they significantly impact users.
-* AgentCore Observability reduces debugging time by providing complete execution visibility throughout the entire reasoning workflow.
+This is exactly where **NAT Gateway** comes in. It's a fully managed AWS service that lets private resources initiate outbound Internet connections safely.
 
-AI Agents typically encounter three major categories of production issues.
+### The problem: NAT Gateway can burn through your budget
 
-The first category is **Quality Failures**, where an agent successfully completes a task but returns incorrect or misleading results. These issues include hallucinations, inaccurate reasoning, incorrect calculations, or selecting inappropriate tools for a given task. Since the request technically succeeds, traditional monitoring systems often fail to detect these problems.
+AWS charges for NAT Gateway based on three main factors:
 
-The second category is **Reliability Issues**, which prevent the agent from completing its workflow successfully. Common examples include authentication failures (401), authorization failures (403), invalid tool inputs (400), missing resources (404), or session context loss that causes the agent to forget previous conversations.
+* **Uptime** — the NAT Gateway runs 24/7 whether or not there's traffic.
+* **Data processed** — billed per GB.
+* **Data transfer fees** — incurred when data crosses different AZs.
 
-The final category is **Efficiency Problems**, which primarily affect performance and operational cost rather than correctness. Examples include excessive response latency, unusually high token consumption, repeated tool invocations, and infinite reasoning loops that continuously consume resources without producing useful results.
+**Example:**
 
-One practical example presented by AWS involves an AI Agent entering an infinite reasoning loop. Because the system prompt instructed the agent to continue attempting calculations until obtaining a "perfect" answer, the agent repeatedly invoked the same calculator tool without reaching a termination condition.
+Suppose your system spans **3 Availability Zones**. AZ1 has 1 NAT Gateway plus 1,000 GB of traffic per month. AZ2 and AZ3 are the same.
 
-During a single session, the agent generated more than **177 reasoning spans**, consumed approximately **266 thousand tokens**, and continued processing for nearly **85 seconds** while never producing an explicit system error. Traditional monitoring solutions only indicated that the request completed successfully.
+The cost for each AZ is calculated as follows:
 
-Using Amazon Bedrock AgentCore Observability, engineers analyzed OpenTelemetry traces together with CloudWatch Logs Insights and discovered that the root cause was not the calculator tool itself, but rather the poorly designed system prompt that lacked an appropriate stopping condition. After introducing reasoning limits and explicit termination conditions, the infinite loop was completely eliminated.
+* Hourly fee: 0.045 × 730 hours = **$32.85**.
+* Data processing fee: 0.045 × 1,000 GB = **$45**.
+* **Total per AZ: $77.85/month.**
 
-This example demonstrates how execution traces provide significantly deeper insights than conventional application logs. Instead of simply observing that an error occurred, developers can understand how the agent reasoned, which tools were selected, and exactly where the execution diverged from the expected workflow.
+Combined cost across three AZs: 77.85 × 3 = **$233.55/month**.
 
-Overall, Amazon Bedrock AgentCore Observability enables organizations to move beyond traditional application monitoring by providing complete visibility into AI Agent behavior. Through CloudWatch dashboards, OpenTelemetry traces, structured logs, and advanced log analytics, engineering teams can proactively identify production issues, optimize reasoning workflows, reduce operational costs, and significantly improve the reliability of production-grade AI Agents.
+So is there any way to bring this number down?
 
+### Solution 1: Identify the traffic
 
-https://aws.amazon.com/blogs/machine-learning/debugging-production-agents-with-amazon-bedrock-agentcore-observability/
+Before optimizing, you need to know where the data is actually going. Questions to answer include:
+
+* Which EC2 instance generates the most traffic?
+* Does the traffic go out to the Internet, or is it only reaching AWS services?
+* How much traffic goes to S3?
+* Are there any unused NAT Gateways?
+
+Tools for this analysis include:
+
+* **Amazon CloudWatch** to track metrics such as `BytesInFromSource`, `BytesOutToDestination`, and `ConnectionAttemptCount`.
+* **VPC Flow Logs** to log detailed traffic in and out of the VPC.
+* **Amazon S3** to store the VPC Flow Logs.
+* **Amazon Athena** to query the logs with SQL and find the "top talkers".
+
+**Example analysis:** after analyzing VPC Flow Logs, you find that **50% of traffic goes to Amazon S3**, 30% calls external APIs, 15% downloads packages and updates, and 5% goes to other services.
+
+### Solution 2: Use an S3 Gateway Endpoint
+
+In the example above, 50% of traffic goes to S3. This data doesn't necessarily need to pass through the NAT Gateway.
+
+**Without an S3 Endpoint:** Private EC2 → NAT Gateway → Internet → S3.
+
+**With an S3 Endpoint:** Private EC2 → S3 Gateway Endpoint → S3, entirely within AWS's internal network — no NAT Gateway or public Internet involved.
+
+**Cost after adding the S3 Endpoint:** assuming 50% of traffic no longer needs the NAT Gateway, each AZ is left with 500 GB.
+
+* NAT hourly fee: **$32.85**.
+* Processing fee for 500 GB: 0.045 × 500 = **$22.50**.
+* **Total per AZ: $55.35/month.**
+
+Total for three AZs: 55.35 × 3 = **$166.05/month**.
+
+Compared to three NAT Gateways without an endpoint ($233.55/month), this saves **$67.50/month**.
+
+![AWS NAT Gateway Cost Optimization](/images/3-Blog/aws_NAT.png)
+
+**Reference:**
+
+https://vegacloud.medium.com/aws-nat-gateway-optimization-bd5f7d2da8a8

@@ -14,9 +14,9 @@ Danh sách các bài blog đã thực hiện bao gồm:
 
 Bài viết hướng dẫn cách xây dựng một trình chỉnh sửa hình ảnh không máy chủ, nơi người dùng tải ảnh lên, mô tả chỉnh sửa bằng ngôn ngữ tự nhiên và nhận kết quả trong vài giây. Nội dung tập trung vào **Amazon Bedrock AgentCore Harness** — thành phần đảm nhiệm toàn bộ việc điều phối AI Agent, quản lý bộ nhớ hội thoại, định tuyến công cụ qua Model Context Protocol (MCP) và cung cấp môi trường thực thi microVM cô lập.
 
-### [Blog 2 - GỠ LỖI AI AGENTS TRONG MÔI TRƯỜNG PRODUCTION VỚI AMAZON BEDROCK AGENTCORE OBSERVABILITY](3.2-Blog2/)
+### [Blog 2 - TỐI ƯU CHI PHÍ NAT GATEWAY TRÊN AWS](3.2-Blog2/)
 
-Bài viết giới thiệu **Amazon Bedrock AgentCore Observability**, giải pháp giúp giám sát và gỡ lỗi AI Agent trong môi trường Production. Nội dung trình bày các thành phần như Metrics, Traces, Structured Logs, OpenTelemetry và Amazon CloudWatch, đồng thời phân tích những nhóm lỗi phổ biến của AI Agent cũng như cách xác định nguyên nhân sự cố thông qua Execution Trace.
+Bài viết phân tích cách NAT Gateway tính phí trên AWS và vì sao chi phí có thể tăng rất nhanh khi hệ thống trải rộng trên nhiều Availability Zone. Nội dung hướng dẫn cách xác định traffic thực tế bằng VPC Flow Logs, Amazon Athena và CloudWatch, sau đó áp dụng **S3 Gateway Endpoint** để loại bỏ phần lớn traffic đi đến S3 ra khỏi NAT Gateway, giúp tiết kiệm đáng kể chi phí vận hành hằng tháng.
 
 ### [Blog 3 - WEB SEARCH TRONG AMAZON BEDROCK AGENTCORE](3.3-Blog3/)
 
