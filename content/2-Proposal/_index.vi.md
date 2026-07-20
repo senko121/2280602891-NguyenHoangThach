@@ -101,25 +101,48 @@ Dự án được triển khai theo bốn giai đoạn:
 
 ## 6. Ước tính ngân sách
 
-Chi phí hạ tầng được ước tính dựa trên **AWS Pricing Calculator** tại khu vực **Singapore (ap-southeast-1)**.
+Chi phí hạ tầng được ước tính dựa trên **AWS Pricing Calculator** tại khu vực **Singapore (ap-southeast-1)**. Hệ thống được thiết kế theo mô hình **chi phí co giãn (elastic cost model)**: chi phí thực tế phụ thuộc vào mức tải và cấp độ sẵn sàng (Availability) mà hệ thống đang vận hành, thay vì một con số cố định.
 
-### Chi phí hạ tầng
+### Tầng 1 — Chi phí vận hành bình thường
 
-- Amazon EC2 (2 × t3.micro): **khoảng 30 USD/tháng**.
-- Amazon RDS MySQL (db.t3.micro): **khoảng 18 USD/tháng**.
-- Application Load Balancer: **khoảng 18 USD/tháng**.
-- Amazon CloudFront: **khoảng 5 USD/tháng**.
-- Amazon S3 (Frontend): **khoảng 0,10 USD/tháng**.
-- Amazon S3 (Hình ảnh): **khoảng 1 USD/tháng**.
-- Amazon Route 53: **khoảng 0,50 USD/tháng**.
-- AWS WAF: **khoảng 7 USD/tháng**.
-- Amazon CloudWatch: **khoảng 3 USD/tháng**.
-- Amazon EC2 Auto Scaling Group: **Không phát sinh chi phí**.
-- NAT Gateway (02 Gateway và chi phí truyền dữ liệu ước tính): **khoảng 100 USD/tháng**.
+Mức chi phí khi hệ thống hoạt động ở tải thông thường: Auto Scaling Group giữ ở mức Desired Capacity (1 EC2), sử dụng 1 NAT Gateway và RDS Single-AZ.
 
-**Tổng chi phí ước tính:** **khoảng 182,60 USD/tháng**, tương đương **2.191,20 USD/năm**.
+| Dịch vụ | Chi phí/tháng |
+|---|---|
+| Amazon EC2 (1 × t3.micro) | ~$15,00 |
+| Amazon RDS MySQL Single-AZ (db.t3.micro) | ~$18,00 |
+| Application Load Balancer | ~$18,00 |
+| Amazon CloudFront | ~$5,00 |
+| Amazon S3 (Frontend) | ~$0,10 |
+| Amazon S3 (Hình ảnh) | ~$1,00 |
+| Amazon Route 53 | ~$0,50 |
+| Amazon CloudWatch | ~$3,00 |
+| NAT Gateway (1 gateway) | ~$50,00 |
+| **Tổng (Tầng 1)** | **~$110,60/tháng (~$1.327/năm)** |
 
-> **Lưu ý:** Chi phí trên chỉ mang tính chất tham khảo, được ước tính theo AWS Pricing Calculator và có thể thay đổi tùy theo mức sử dụng thực tế cũng như chính sách giá của AWS.
+### Tầng 2 — Khi lưu lượng tăng cao (Auto Scaling kích hoạt)
+
+Khi tải tăng, Auto Scaling Group tự động mở rộng lên Maximum Capacity (2 EC2), đồng thời NAT Gateway xử lý nhiều dữ liệu hơn — chi phí tăng theo đúng lưu lượng thực tế sử dụng.
+
+| Nguyên nhân tăng chi phí | Chi phí phát sinh |
+|---|---|
+| EC2 thứ 2 được Auto Scaling khởi tạo (Max = 2) | +$15,00 |
+| NAT Gateway xử lý thêm dữ liệu do traffic tăng | +$15,00 |
+| **Tổng (Tầng 1 + Tầng 2)** | **~$140,60/tháng** |
+
+### Tầng 3 — Khi nâng cấp lên kiến trúc Production HA đầy đủ
+
+Đây là mức chi phí nếu triển khai đầy đủ kiến trúc tham chiếu có tính sẵn sàng cao (High Availability): thêm NAT Gateway thứ hai để loại bỏ Single Point of Failure giữa các AZ, bật AWS WAF để bảo vệ ứng dụng, và có thể nâng RDS lên Multi-AZ.
+
+| Nâng cấp thêm | Chi phí phát sinh |
+|---|---|
+| NAT Gateway thứ 2 (dự phòng theo từng AZ) | +$50,00 |
+| AWS WAF | +$7,00 |
+| *(Tùy chọn)* RDS Multi-AZ | +$18,00 |
+| **Tổng (Tầng 1 + Tầng 3, chưa gồm RDS Multi-AZ)** | **~$167,60/tháng** |
+| **Tổng (Tầng 1 + Tầng 3, gồm cả RDS Multi-AZ)** | **~$185,60/tháng** |
+
+> **Lưu ý:** Chi phí trên chỉ mang tính chất tham khảo, được ước tính theo AWS Pricing Calculator và có thể thay đổi tùy theo mức sử dụng thực tế cũng như chính sách giá của AWS. Workshop thực hành trong báo cáo này được triển khai ở mức **Tầng 1** nhằm tối ưu chi phí học tập; kiến trúc có thể nâng cấp lên Tầng 3 khi đưa vào môi trường Production thực tế.
 
 ---
 
