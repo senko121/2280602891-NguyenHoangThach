@@ -60,7 +60,7 @@ After each edit, a Python program runs directly inside the microVM to add a wate
 
 The diagram below illustrates the overall architecture of the solution, from the user interface to the AgentCore components and image-processing tools on AWS.
 
-![Amazon Bedrock Architecture](/images/3-Blog/bedrock-architecture.png)
+![Amazon Bedrock Architecture](/images/3-Blog/bedrock-agentcore-architecture.png)
 
 **Reference:**
 
