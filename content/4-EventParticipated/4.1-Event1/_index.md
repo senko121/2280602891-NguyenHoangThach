@@ -156,6 +156,8 @@ These discussions helped strengthen my understanding of teamwork and collaborati
 
 #### Some event photos
 
-*Add your event photos here*
+![FCAJ Community Day event photo](/images/4-Event/6C7A4926.JPG)
+
+![FCAJ Community Day event photo](/images/4-Event/image.png)
 
 > Overall, the event provided both technical and personal development value. It helped me reshape my learning strategies, understand modern AI-assisted development methodologies and establish a clearer professional direction for my future career.

@@ -161,6 +161,8 @@ Những cuộc thảo luận này giúp em hiểu rõ hơn về tầm quan trọ
 
 #### Một số hình ảnh trong sự kiện
 
-*Thêm hình ảnh của sự kiện tại đây*
+![Hình ảnh sự kiện FCAJ Community Day](/images/4-Event/6C7A4926.JPG)
+
+![Hình ảnh sự kiện FCAJ Community Day](/images/4-Event/image.png)
 
 > Nhìn chung, sự kiện không chỉ mang lại những kiến thức kỹ thuật hữu ích mà còn giúp em thay đổi tư duy về phương pháp học tập, cách tiếp cận AI và định hướng phát triển nghề nghiệp trong tương lai. Đây là một trải nghiệm rất giá trị, giúp em có thêm nhiều góc nhìn mới để áp dụng vào quá trình học tập, thực tập và phát triển bản thân trong lĩnh vực công nghệ thông tin.
